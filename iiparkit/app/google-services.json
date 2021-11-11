@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "232212520511",
+    "project_id": "iiparkit",
+    "storage_bucket": "iiparkit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232212520511:android:90b10ca6d58e814644e28a",
+        "android_client_info": {
+          "package_name": "com.example.iiparkit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232212520511-qn6odadliu14i9mpmd0m8gmpd85s0262.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrKDsjKbYVNV7LXfu4EnDy7YtQP7M-Lp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "232212520511-qn6odadliu14i9mpmd0m8gmpd85s0262.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
