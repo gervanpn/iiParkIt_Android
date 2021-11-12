@@ -8,21 +8,15 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import com.example.iiparkit.MainActivity
+
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
-import java.util.*
-import androidx.annotation.NonNull
-
 import com.google.android.gms.tasks.OnCompleteListener
-
 import com.google.firebase.auth.UserProfileChangeRequest
-
-
-
 
 @SuppressLint("StaticFieldLeak")
 object FirebaseHelper {
@@ -85,8 +79,8 @@ object FirebaseHelper {
     }
 
     fun signUp(email : String, password : String){
-        auth!!
-            .createUserWithEmailAndPassword(email!!, password!!)
+        auth
+            .createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(context as Activity) { task ->
                 //mProgressBar!!.hide()
 
@@ -96,7 +90,7 @@ object FirebaseHelper {
                         Toast.LENGTH_SHORT).show()
                     Log.d(TAG, "createUserWithEmail:success")
 
-                    val userId = auth!!.currentUser!!.uid
+                    val userId = auth.currentUser!!.uid
 
                     //Verify Email
                     verifyEmail();
@@ -117,7 +111,7 @@ object FirebaseHelper {
     }
 
     fun verifyEmail(){
-        val mUser = auth!!.currentUser;
+        val mUser = auth.currentUser;
         mUser!!.sendEmailVerification()
             .addOnCompleteListener(context as Activity) { task ->
                 if (task.isSuccessful) {
