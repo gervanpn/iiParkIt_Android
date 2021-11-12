@@ -127,6 +127,22 @@ object FirebaseHelper {
             }
     }
 
+    fun passwordReset(email: String){
+        auth
+            .sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val message = "Email sent."
+                    Log.d(TAG, message)
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    //updateUI()
+                } else {
+                    task.exception!!.message?.let { Log.w(TAG, it) }
+                    Toast.makeText(context, "No user found with this email.", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
     fun signOut(){
         auth.signOut()
     }
