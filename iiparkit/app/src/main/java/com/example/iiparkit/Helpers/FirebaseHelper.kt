@@ -160,6 +160,25 @@ object FirebaseHelper {
                 Log.w(TAG, "Error getting documents: ", exception)
             }
     }
+
+    fun listenFB(){
+        var path = ""
+        //val channel = Channel<List<MessageEntity>>()
+        db.collection(path).addSnapshotListener { data, error ->
+            if (error != null) {
+               // channel.close(error)
+            } else {
+                if (data != null) {
+                    //val messages = data.toObjects(MessageEntity::class.java)
+                    //till this point it gets executed^^^^
+                    //channel.sendBlocking(messages)
+                } else {
+                    //.close(CancellationException("No data received"))
+                }
+            }
+        }
+       // return channel
+    }
     fun readDB(collection : String, document : String) : String {
         val docRef = db.collection(collection).document(document)
         docRef.get()
