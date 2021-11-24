@@ -2,9 +2,13 @@ package com.example.iiparkit
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,9 +26,13 @@ import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 import com.google.common.util.concurrent.ListenableFuture
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Default
 import okhttp3.*
+import java.io.File
 //import com.squareup.okhttp.*
 import java.io.IOException
+import java.lang.Byte.decode
 import java.lang.reflect.Type
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -66,7 +74,7 @@ class QRScannerActivity : AppCompatActivity() {
             codeScanner.startPreview()
         }
 
-       // run("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example")
+        run("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example")
     }
 
 
@@ -91,33 +99,42 @@ class QRScannerActivity : AppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
 
                 //val collectionType: Type = object : TypeToken<DataParsing>() {}.getType()
-                val body = response.body?.string()
+                val body = response.body?.bytes()
                 if (body != null) {
-                    Log.d("response", body)
+                    //Log.d("response", body.toString())
+                    val job1 = GlobalScope.async {saveBitmap("","test.png",body) }
+                    runBlocking {
+                        job1.await()
+                    }
+//                    val intent = Intent()
+//                        .setType("*/*")
+//                        .setAction(Intent.ACTION_GET_CONTENT)
+//
+//                    startActivityForResult(Intent.createChooser(intent, "Select a file"), 111)
                 }
-                //parse = gson.fromJson(body, collectionType)
-
-                //parse.hints.forEach { println(it.food.label) }
-                //searchedFoodData.postValue(parse)
-                //return parse
             }
-
-//            override fun onFailure(request: Request?, e: IOException?) {
-//              ///  TODO("Not yet implemented")
-//            }
-
-//            override fun onResponse(response: Response?) {
-//               /// TODO("Not yet implemented")
-//                val body = response.body?.toString()
-//                Log.d("response",body)
-//            }
-
-
         })
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-        //foodSearchListLoaded.value = true
-        //return parse
+        if (requestCode == 111 && resultCode == RESULT_OK) {
+            val selectedFile = data?.data //The uri with the location of the file
+        }
+    }
+
+    suspend fun Context.saveBitmap(path : String, fileName: String, bitmap: ByteArray) = withContext(Dispatchers.IO) {
+        val file = File(filesDir, fileName)
+        Log.d("file",file.getAbsolutePath())
+        //val imageBytes = Base64.decode(bitmap, Base64.DEFAULT);
+        val image= BitmapFactory.decodeByteArray(bitmap, 0, bitmap.size);
+        //file.printWriter().use {out -> out.print(bitmap)}
+
+            file.outputStream().use {
+
+            image.compress(Bitmap.CompressFormat.PNG, 100, it)
+        }
     }
 
 
